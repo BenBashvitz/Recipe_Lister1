@@ -5,6 +5,9 @@ import android.os.FileUtils;
 
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import org.json.*;
 import org.json.simple.parser.JSONParser;
@@ -35,20 +38,22 @@ public class JSONWorker {
         this.jfile = new File(path);
     }
 
-    public void InitializeJFile(){
+    public void InitializeJFile(String key){
         Gson gson = new Gson();
-        JSONObject obj = gson.fromJson(CreateNewJObject("Categories", new JSONArray()), JSONObject.class);
+        JsonArray arr = new JsonArray();
+        JsonObject obj = new JsonObject();
+        obj.add("Category", gson.toJsonTree("test"));
+        arr.add(obj);
+        AddObjToJson(key, new JsonArray(), false);
 
     }
 
-    public String CreateNewJObject(String key, Object value){
+    public String CreateNewJObject(String key, JsonElement value){
         Gson gson = new Gson();
         String Jstring = null;
-        try {
-            Jstring = gson.toJson(new org.json.JSONObject().put(key,value));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JsonObject obj = new JsonObject();
+        obj.add(key, value);
+        Jstring = gson.toJson(obj);
         return Jstring;
     }
 
@@ -87,7 +92,7 @@ public class JSONWorker {
 
         FileOutputStream fileOutputStream = null;
         try {
-            fileOutputStream = new FileOutputStream(this.jfile,flag);
+            fileOutputStream = new FileOutputStream(this.jfile, flag);
 
             fileOutputStream.write(jObj.getBytes());
             fileOutputStream.flush();
@@ -99,14 +104,39 @@ public class JSONWorker {
         }
     }
 
-    public String ReadValuesFromJson(){
+    public JsonObject ReadJObjectFromJson(){
         Gson gson = new Gson();
-        org.json.JSONObject obj = gson.fromJson(ReadJson(), JSONObject.class);
-        return obj.toString();
+        JsonObject obj = gson.fromJson(ReadJson(), JsonObject.class);
+        return obj;
     }
 
-    public void AddObjToJson(String key, String value, boolean flag){
+    public JsonArray ReadJArrayFromJson(String mainkey) {
+        JsonObject obj = ReadJObjectFromJson();
+        JsonArray arr = null;
+        arr = obj.getAsJsonArray(mainkey);
+        return arr;
+    }
+
+    public void AddObjToJson(String key, JsonElement value, boolean flag){
         String newJObjectString = CreateNewJObject(key, value);
         WriteJson(newJObjectString, flag);
+    }
+
+    public void AddObjToJArray(String mainKey, String key, String value){
+        Gson gson = new Gson();
+        JsonArray arr = ReadJArrayFromJson(mainKey);
+        JsonObject obj = new JsonObject();
+        obj.add(key,gson.toJsonTree(value));
+        arr.add(obj);
+        AddObjToJson(mainKey, arr, false);
+    }
+
+    public String[] ReadValuesFromJFile(String mainkey){
+        JsonArray arr = ReadJArrayFromJson(mainkey);
+        String[] values = {"No Current Categories"};
+        for (int i = 0; i < arr.size(); i++) {
+            values[i] = arr.get(i).toString();
+        }
+        return values;
     }
 }

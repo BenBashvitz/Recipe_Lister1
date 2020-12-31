@@ -19,13 +19,15 @@ public class CategoryActivity extends AppCompatActivity {
     ListView CategoryLV;
     String[] Categories;
     Button AddCategory;
+    JSONWorker jworker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
-        JSONWorker.InitializeFile(this);
+        jworker = new JSONWorker(this);
+        jworker.InitializeJFile("Categories");
         CategoryLV = (ListView)findViewById(R.id.Category_ListView);
-        Categories = JSONWorker.ReadValuesFromJFile(this , "Category");
+        Categories = jworker.ReadValuesFromJFile("Categories");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_category_list, R.id.Category_List_Text, Categories);
         CategoryLV.setAdapter(adapter);
         AddCategory = (Button)findViewById(R.id.Button_Add_Category);
@@ -33,7 +35,7 @@ public class CategoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(CategoryActivity.this);
-                builder.setTitle("Title");
+                builder.setTitle("New Category");
 
 // Set up the input
                 final EditText input = new EditText(CategoryActivity.this);
@@ -46,11 +48,9 @@ public class CategoryActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String NewCategoryName = input.getText().toString();
-                        JSONWorker.AddObjToJFile(CategoryActivity.this , "Category", NewCategoryName);
-                        Categories = JSONWorker.ReadValuesFromJFile(CategoryActivity.this, "Category");
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(CategoryActivity.this, R.layout.activity_category_list, R.id.Category_List_Text, Categories);
-                        CategoryLV.setAdapter(adapter);
-                        CategoryActivity.this.recreate();
+                        jworker.AddObjToJArray("Categories", "Category", NewCategoryName);
+                        Categories = jworker.ReadValuesFromJFile("Categories");
+                        CategoryLV.add
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
