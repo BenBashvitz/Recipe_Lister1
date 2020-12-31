@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CategoryActivity"
+    android:id="@id/RelativeLayout">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@id/Category_Header"
+        android:text="@string/Category_Header_Text"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="sans-serif-light"
+        android:textSize="42sp"
+        />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@id/Category_ListView"
+        android:layout_below="@id/Category_Header"
+        android:divider="@color/material_blue_grey_800"
+        android:dividerHeight="1dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@id/Button_Add_Category"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/Button_Add_Category_Text"
+        android:fontFamily="sans-serif-light"
+        android:textSize="16sp"
+        />
+
+
+</android.widget.RelativeLayout>
