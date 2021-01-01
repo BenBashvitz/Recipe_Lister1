@@ -23,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,20 +33,21 @@ public class JSONWorker {
     String path;
     File jfile;
 
-    public JSONWorker(Context con){
+    public JSONWorker(Context con, String name){
         this.con = con;
-        this.path = con.getFilesDir() + "/test.json";
+        this.path = con.getFilesDir() + name;
         this.jfile = new File(path);
     }
 
     public void InitializeJFile(String key){
-        Gson gson = new Gson();
-        JsonArray arr = new JsonArray();
-        JsonObject obj = new JsonObject();
-        obj.add("Category", gson.toJsonTree("test"));
-        arr.add(obj);
-        AddObjToJson(key, new JsonArray(), false);
-
+        if(!this.jfile.exists()) {
+            Gson gson = new Gson();
+            JsonArray arr = new JsonArray();
+            JsonObject obj = new JsonObject();
+            obj.add("Category", gson.toJsonTree("test"));
+            arr.add(obj);
+            AddObjToJson(key, new JsonArray(), false);
+        }
     }
 
     public String CreateNewJObject(String key, JsonElement value){
@@ -131,11 +133,16 @@ public class JSONWorker {
         AddObjToJson(mainKey, arr, false);
     }
 
-    public String[] ReadValuesFromJFile(String mainkey){
+    public ArrayList<String> ReadValuesFromJFile(String mainkey, String key){
         JsonArray arr = ReadJArrayFromJson(mainkey);
-        String[] values = {"No Current Categories"};
-        for (int i = 0; i < arr.size(); i++) {
-            values[i] = arr.get(i).toString();
+        ArrayList<String> values = new ArrayList<String>();
+        values.add("No Current Categories");
+        if(arr != null){
+            values.clear();
+            for (int i = 0; i < arr.size(); i++) {
+                JsonObject obj = arr.get(i).getAsJsonObject();
+                values.add(obj.get(key).toString());
+            }
         }
         return values;
     }

@@ -2,4 +2,6 @@
     <string name="app_name">Recipe Lister</string>
     <string name="Category_Header_Text">Categories</string>
     <string name="Button_Add_Category_Text">Add New Category</string>
+    <string name="Recipe_Header_Text">Categories</string>
+    <string name="Button_Add_Recipe_Text">Add New Category</string>
 </resources>

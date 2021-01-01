@@ -14,35 +14,34 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-
-public class CategoryActivity extends AppCompatActivity {
-    ListView CategoryLV;
-    ArrayList<String> Categories;
-    Button AddCategory;
+public class RecipeActivity extends AppCompatActivity {
+    ListView RecipeLV;
+    ArrayList<String> Recipes;
+    Button AddRecipe;
     JSONWorker jworker;
     String mainkey;
     String key;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
-        mainkey = "Categories";
-        key = "Category";
-        jworker = new JSONWorker(this, "/categories.json");
+        setContentView(R.layout.activity_recipe);
+        mainkey = "Recipes";
+        key = "Recipe";
+        jworker = new JSONWorker(this, "/recipes.json");
         jworker.InitializeJFile(mainkey);
-        CategoryLV = (ListView)findViewById(R.id.Category_ListView);
-        Categories = jworker.ReadValuesFromJFile(mainkey, key);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_button_list, R.id.Category_List_Text, Categories);
-        CategoryLV.setAdapter(adapter);
-        AddCategory = (Button)findViewById(R.id.Button_Add_Category);
-        AddCategory.setOnClickListener(new View.OnClickListener() {
+        RecipeLV = (ListView)findViewById(R.id.Category_ListView);
+        Recipes = jworker.ReadValuesFromJFile(mainkey, key);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_button_list, R.id.Category_List_Text, Recipes);
+        RecipeLV.setAdapter(adapter);
+        AddRecipe = (Button)findViewById(R.id.Button_Add_Category);
+        AddRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CategoryActivity.this);
-                builder.setTitle("New Category");
+                AlertDialog.Builder builder = new AlertDialog.Builder(RecipeActivity.this);
+                builder.setTitle("New Recipe");
 
 // Set up the input
-                final EditText input = new EditText(CategoryActivity.this);
+                final EditText input = new EditText(RecipeActivity.this);
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);
@@ -51,11 +50,11 @@ public class CategoryActivity extends AppCompatActivity {
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String NewCategoryName = input.getText().toString();
-                        jworker.AddObjToJArray(mainkey, key, NewCategoryName);
-                        Categories = jworker.ReadValuesFromJFile(mainkey, key);
-                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(CategoryActivity.this, R.layout.activity_button_list, R.id.Category_List_Text, Categories );
-                        CategoryLV.setAdapter(adapter1);
+                        String NewRecipeName = input.getText().toString();
+                        jworker.AddObjToJArray(mainkey, key, NewRecipeName);
+                        Recipes = jworker.ReadValuesFromJFile(mainkey, key);
+                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(RecipeActivity.this, R.layout.activity_button_list, R.id.Category_List_Text, Recipes);
+                        RecipeLV.setAdapter(adapter1);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
