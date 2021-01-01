@@ -13,22 +13,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 
 
 public class CategoryActivity extends AppCompatActivity {
     ListView CategoryLV;
-    String[] Categories;
+    ArrayList<String> Categories;
     Button AddCategory;
     JSONWorker jworker;
+    String mainkey;
+    String key;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
+        mainkey = "Categories";
+        key = "Category";
         jworker = new JSONWorker(this);
-        jworker.InitializeJFile("Categories");
+        jworker.InitializeJFile(mainkey);
         CategoryLV = (ListView)findViewById(R.id.Category_ListView);
-        Categories = jworker.ReadValuesFromJFile("Categories");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_category_list, R.id.Category_List_Text, Categories);
+        Categories = jworker.ReadValuesFromJFile(mainkey, key);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_category_list, R.id.Category_List_Text, Categories);
         CategoryLV.setAdapter(adapter);
         AddCategory = (Button)findViewById(R.id.Button_Add_Category);
         AddCategory.setOnClickListener(new View.OnClickListener() {
@@ -48,9 +53,10 @@ public class CategoryActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String NewCategoryName = input.getText().toString();
-                        jworker.AddObjToJArray("Categories", "Category", NewCategoryName);
-                        Categories = jworker.ReadValuesFromJFile("Categories");
-                        CategoryLV.add
+                        jworker.AddObjToJArray(mainkey, key, NewCategoryName);
+                        Categories = jworker.ReadValuesFromJFile(mainkey, key);
+                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(CategoryActivity.this, R.layout.activity_category_list, R.id.Category_List_Text, Categories );
+                        CategoryLV.setAdapter(adapter1);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
