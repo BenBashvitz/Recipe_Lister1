@@ -4,9 +4,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,17 +24,19 @@ public class CategoryActivity extends AppCompatActivity {
     JSONWorker jworker;
     String mainkey;
     String key;
+    Intent i;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
+        i = new Intent(this, RecipeActivity.class);
         mainkey = "Categories";
         key = "Category";
         jworker = new JSONWorker(this, "/categories.json");
         jworker.InitializeJFile(mainkey);
         CategoryLV = (ListView)findViewById(R.id.Category_ListView);
         Categories = jworker.ReadValuesFromJFile(mainkey, key);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_button_list, R.id.Category_List_Text, Categories);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_button_list, R.id.Button_List_Text, Categories);
         CategoryLV.setAdapter(adapter);
         AddCategory = (Button)findViewById(R.id.Button_Add_Category);
         AddCategory.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +58,7 @@ public class CategoryActivity extends AppCompatActivity {
                         String NewCategoryName = input.getText().toString();
                         jworker.AddObjToJArray(mainkey, key, NewCategoryName);
                         Categories = jworker.ReadValuesFromJFile(mainkey, key);
-                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(CategoryActivity.this, R.layout.activity_button_list, R.id.Category_List_Text, Categories );
+                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(CategoryActivity.this, R.layout.activity_button_list, R.id.Button_List_Text, Categories );
                         CategoryLV.setAdapter(adapter1);
                     }
                 });
@@ -68,5 +72,12 @@ public class CategoryActivity extends AppCompatActivity {
                 builder.show();
             }
         });
+    }
+
+    public void ButtonClickHandler(View view) {
+        Button b = (Button)view;
+        Intent i = new Intent(this,RecipeActivity.class);
+        i.putExtra("RECIPE_HEADER", b.getText().toString());
+        startActivity(i);
     }
 }

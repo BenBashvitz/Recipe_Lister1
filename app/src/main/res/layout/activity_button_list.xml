@@ -7,10 +7,12 @@
     tools:context=".ButtonListActivity">
 
     <Button
-        android:id="@id/Category_List_Text"
+        android:id="@id/Button_List_Text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textColor="@android:color/black"
+        android:clickable="true"
+        android:onClick="ButtonClickHandler"
         />
 </android.widget.LinearLayout>

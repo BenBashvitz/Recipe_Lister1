@@ -4,7 +4,7 @@
     <item name="Category_ListView" type="id"/>
     <item name="Category_Header" type="id"/>
     <item name="Button_Add_Category" type="id"/>
-    <item name="Category_List_Text" type="id"/>
+    <item name="Button_List_Text" type="id"/>
     <item name="Recipe_ListView" type="id"/>
     <item name="Recipe_Header" type="id"/>
     <item name="Button_Add_Recipe" type="id"/>

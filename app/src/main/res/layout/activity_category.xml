@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:id="@id/Category_ListView"
         android:layout_below="@id/Category_Header"
+        android:layout_above="@id/Button_Add_Category"
         android:divider="@color/material_blue_grey_800"
         android:dividerHeight="1dp"
         />

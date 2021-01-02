@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -11,29 +12,35 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class RecipeActivity extends AppCompatActivity {
+    TextView recipe_header;
     ListView RecipeLV;
     ArrayList<String> Recipes;
     Button AddRecipe;
     JSONWorker jworker;
     String mainkey;
     String key;
+    Intent i;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+        i = getIntent();
+        recipe_header = (TextView)findViewById(R.id.Recipe_Header);
+        recipe_header.setText(i.getStringExtra("RECIPE_HEADER"));
         mainkey = "Recipes";
         key = "Recipe";
         jworker = new JSONWorker(this, "/recipes.json");
         jworker.InitializeJFile(mainkey);
-        RecipeLV = (ListView)findViewById(R.id.Category_ListView);
+        RecipeLV = (ListView)findViewById(R.id.Recipe_ListView);
         Recipes = jworker.ReadValuesFromJFile(mainkey, key);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_button_list, R.id.Category_List_Text, Recipes);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_button_list, R.id.Button_List_Text, Recipes);
         RecipeLV.setAdapter(adapter);
-        AddRecipe = (Button)findViewById(R.id.Button_Add_Category);
+        AddRecipe = (Button)findViewById(R.id.Button_Add_Recipe);
         AddRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +60,7 @@ public class RecipeActivity extends AppCompatActivity {
                         String NewRecipeName = input.getText().toString();
                         jworker.AddObjToJArray(mainkey, key, NewRecipeName);
                         Recipes = jworker.ReadValuesFromJFile(mainkey, key);
-                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(RecipeActivity.this, R.layout.activity_button_list, R.id.Category_List_Text, Recipes);
+                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(RecipeActivity.this, R.layout.activity_button_list, R.id.Button_List_Text, Recipes);
                         RecipeLV.setAdapter(adapter1);
                     }
                 });
